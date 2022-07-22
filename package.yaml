@@ -1,8 +1,10 @@
 descriptor-schema-version: "2.7"
 info:
   name: iox-aarch64-alpine
-  version: latest
   description: Alpine Linux ARM with lots of extras (tcpdump, telnet, lsof, netstat, nmap, wget, etc...)
+  author-name: "Emmanuel Tychon"
+  author-link: "http://www.cisco.com"
+  version: "1.1"
 app:
   cpuarch: aarch64
   env:
