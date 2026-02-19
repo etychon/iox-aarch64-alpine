@@ -1,0 +1,12 @@
+<image_properties>
+  <vnf_type>app-hosting</vnf_type>
+  <name>Custom-App</name>
+  <arch>aarch64</arch>
+  <version>1.1</version>
+  <imageType>dockertype</imageType>
+  <applicationDescription>
+    "Alpine Linux baby!"
+  </applicationDescription>
+  <applicationVendor>Cisco</applicationVendor>
+  <applicationMaxInstances>1</applicationMaxInstances>
+</image_properties>
