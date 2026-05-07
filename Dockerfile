@@ -1,21 +1,15 @@
-FROM multiarch/qemu-user-static:x86_64-aarch64 AS qemu
-FROM --platform=linux/arm64 arm64v8/alpine:latest
-COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
+FROM arm64v8/alpine:3.21 AS runtime
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV TERM xterm
-
-ADD idle.sh /idle.sh
-
-# Install.
-RUN \
-  apk add  --no-cache bash curl git htop unzip vim wget less net-tools joe curl iproute2 python3 nmap tcpdump lsof busybox-extras minicom screen
+COPY idle.sh /idle.sh
+RUN chmod 0755 /idle.sh
+RUN apk add --no-cache coreutils eudev picocom bash curl git htop unzip vim wget less net-tools joe curl iproute2 python3 nmap tcpdump lsof busybox-extras minicom screen
   
-# Set environment variables.
-ENV HOME /root
 
-# Define working directory.
+ENV HOME=/root \
+    TERM=xterm
 WORKDIR /root
+CMD ["sh", "/idle.sh"]
 
-# Define default command.
-CMD ["bash", "/idle.sh"]
+FROM multiarch/qemu-user-static:x86_64-aarch64 AS qemu
+FROM runtime AS runtime-with-qemu
+COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
