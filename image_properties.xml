@@ -2,7 +2,7 @@
   <vnf_type>app-hosting</vnf_type>
   <name>Custom-App</name>
   <arch>aarch64</arch>
-  <version>1.2.1</version>
+  <version>1.2.3</version>
   <imageType>dockertype</imageType>
   <applicationDescription>
     "Alpine Linux baby!"

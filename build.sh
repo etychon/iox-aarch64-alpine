@@ -14,6 +14,8 @@ BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-iox-aarch64-alpine}"
 IMAGE_NAME="${IMAGE_NAME:-${BASE_IMAGE_NAME}:${VERSION}}"
 PACKAGE_NAME="${PACKAGE_NAME:-${BASE_IMAGE_NAME}-${VERSION}.tar}"
 PLATFORM="${PLATFORM:-linux/arm64}"
+APP_VERSION="${APP_VERSION:-${VERSION}}"
+APP_NAME="${APP_NAME:-${BASE_IMAGE_NAME}}"
 
 # Auto-select target when TARGET is not explicitly set:
 # - ARM64 hosts: smallest runtime image
@@ -41,6 +43,8 @@ fi
 docker buildx build \
   --platform "${PLATFORM}" \
   --target "${EFFECTIVE_TARGET}" \
+  --build-arg "APP_NAME=${APP_NAME}" \
+  --build-arg "APP_VERSION=${APP_VERSION}" \
   --load \
   -t "${IMAGE_NAME}" \
   .

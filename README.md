@@ -35,8 +35,82 @@ The IOx app can be installed using:
 
 After the app is installed, activated, and running, open a shell session with:
 
+Run in EXEC mode:
+
 ```sh
 app-hosting connect appid <app_name> session
+```
+
+### Router CLI examples (download, install, configure, upgrade)
+
+The examples below use anonymized values:
+
+- SCP username: `labuser`
+- SCP server IP: `198.51.100.10`
+
+#### 1) Download IOx app package to device
+
+Run in EXEC mode:
+
+```text
+copy scp://labuser@198.51.100.10//tftpboot/ftp/iox-aarch64-alpine-1.2.3.tar bootflash:
+```
+
+#### 2) Install IOx app on device
+
+Run in EXEC mode:
+
+```text
+app-hosting install appid alpine package bootflash:iox-aarch64-alpine-1.2.3.tar
+```
+
+#### 3) Initial IOx network/app configuration (example on IR1800)
+
+Run in global configuration mode (`configure terminal`):
+
+```text
+ip dns server
+
+interface VirtualPortGroup0
+ description IOx App Hosting
+ ip address 192.168.35.1 255.255.255.0
+ ip nat inside          ! optional, if you want NAT for the app
+ no shutdown
+
+app-hosting appid alpine
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.35.2 netmask 255.255.255.0
+  exit
+ app-default-gateway 192.168.35.1 guest-interface 0
+ name-server0 192.168.35.1
+ start
+```
+
+#### 4) Upgrade app package (app restarts after upgrade)
+
+Run in EXEC mode:
+
+```text
+copy scp://labuser@198.51.100.10//tftpboot/ftp/iox-aarch64-alpine-1.2.3.tar bootflash:
+app-hosting upgrade appid alpine package bootflash:iox-aarch64-alpine-1.2.3.tar
+```
+
+When you connect, the shell displays a banner that includes:
+
+- Running app name
+- Running image version
+- Author name
+- Generic operational disclaimers
+
+By default, the build embeds:
+
+- `APP_NAME=iox-aarch64-alpine`
+- `APP_VERSION=<value from VERSION>`
+
+You can override banner metadata at build time:
+
+```sh
+APP_NAME="iox-aarch64-alpine" sh ./build.sh
 ```
 
 ## Image size optimizations

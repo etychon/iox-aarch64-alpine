@@ -3,7 +3,7 @@
 All notable changes to this project are documented in this file.
 
 ## Unreleased
-- No changes since last release.
+- Imroved documentation and added pre-commit hooks. Updated version numbering and build scripts.
 
 ## 1.0 - 2020-09-29
 - Update README.md
