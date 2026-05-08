@@ -105,6 +105,7 @@ fi
 # Persist and synchronize derived metadata files.
 printf '%s\n' "$NEXT_VERSION" > "$VERSION_FILE"
 ./sync-version.sh
+./update-changelog.sh
 
 # Optional local tag creation for GitHub release flows.
 if [ "$WANT_TAG" -eq 1 ]; then

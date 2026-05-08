@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+# Keep CHANGELOG.md aligned with actual git history on each commit.
+./update-changelog.sh
+
+# Stage changelog updates so they are part of the same commit.
+if ! git diff --quiet -- CHANGELOG.md; then
+  git add CHANGELOG.md
+fi

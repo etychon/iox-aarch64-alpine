@@ -4,7 +4,7 @@ info:
   description: Alpine Linux ARM with lots of extras (tcpdump, telnet, lsof, netstat, nmap, wget, etc...)
   author-name: "Emmanuel Tychon"
   author-link: "http://www.cisco.com"
-  version: "1.2.0"
+  version: "1.2.1"
 app:
   cpuarch: aarch64
   env:
@@ -13,9 +13,9 @@ app:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     TERM: xterm
   resources:
-    cpu: 128
-    memory: 128
-    disk: 128
+    cpu: 256
+    memory: 512
+    disk: 256
     network:
     - interface-name: eth0
       ports: {}

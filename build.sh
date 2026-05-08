@@ -14,7 +14,25 @@ BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-iox-aarch64-alpine}"
 IMAGE_NAME="${IMAGE_NAME:-${BASE_IMAGE_NAME}:${VERSION}}"
 PACKAGE_NAME="${PACKAGE_NAME:-${BASE_IMAGE_NAME}-${VERSION}.tar}"
 PLATFORM="${PLATFORM:-linux/arm64}"
-TARGET="${TARGET:-runtime}"
+
+# Auto-select target when TARGET is not explicitly set:
+# - ARM64 hosts: smallest runtime image
+# - Non-ARM64 hosts (for example x86_64): runtime-with-qemu
+HOST_ARCH="$(uname -m)"
+if [ "${TARGET+x}" = "x" ] && [ -n "${TARGET}" ]; then
+  EFFECTIVE_TARGET="${TARGET}"
+  echo "Using explicit TARGET=${EFFECTIVE_TARGET}"
+else
+  case "${HOST_ARCH}" in
+    aarch64|arm64)
+      EFFECTIVE_TARGET="runtime"
+      ;;
+    *)
+      EFFECTIVE_TARGET="runtime-with-qemu"
+      ;;
+  esac
+  echo "Auto-selected TARGET=${EFFECTIVE_TARGET} for host architecture ${HOST_ARCH}"
+fi
 
 # Ensure metadata files reflect VERSION before building.
 ./sync-version.sh
@@ -22,7 +40,7 @@ TARGET="${TARGET:-runtime}"
 # Build ARM64 image using Buildx and load it locally.
 docker buildx build \
   --platform "${PLATFORM}" \
-  --target "${TARGET}" \
+  --target "${EFFECTIVE_TARGET}" \
   --load \
   -t "${IMAGE_NAME}" \
   .
